@@ -1,3 +1,6 @@
+import os
+import subprocess
+import sys
 import requests
 import dns.resolver
 import psutil
@@ -75,8 +78,21 @@ class NetworkToolkit:
         }
         return specs
 
+    def install_requirements(self):
+        """Check and install required packages."""
+        required_packages = ['requests', 'dnspython', 'psutil', 'speedtest-cli']
+
+        for package in required_packages:
+            try:
+                __import__(package)
+                print(f"{package} is already installed.")
+            except ImportError:
+                print(f"{package} not found. Installing...")
+                subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+    
 if __name__ == "__main__":
     toolkit = NetworkToolkit()
+    toolkit.install_requirements()  # Install requirements if necessary
     toolkit.print_anime_intro()
     
     while True:
@@ -130,3 +146,4 @@ if __name__ == "__main__":
 
         else:
             print("Invalid option, please try again.")
+
